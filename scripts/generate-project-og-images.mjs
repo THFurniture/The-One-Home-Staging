@@ -9,8 +9,11 @@ const publicDir = path.join(projectRoot, "public");
 const projectsFile = path.join(projectRoot, "app", "data", "projects.ts");
 const ogDir = path.join(publicDir, "og");
 const tempDir = path.join(ogDir, ".tmp");
+const mainOgSource = path.join(ogDir, "main-og.jpeg");
 const ogWidth = 1200;
 const ogHeight = 630;
+const args = new Set(process.argv.slice(2));
+const generateMainOnly = args.has("--main");
 const chromeCandidates = [
   process.env.CHROME_PATH,
   "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
@@ -213,7 +216,14 @@ async function main() {
   await ensureDirectory(ogDir);
 
   const source = await fs.readFile(projectsFile, "utf8");
-  const projects = parseProjectDefinitions(source);
+  const projectDefinitions = parseProjectDefinitions(source);
+  const mainOgDefinition = {
+    slug: "main",
+    name: "Thu Luxury Homes",
+    input: mainOgSource,
+    output: path.join(ogDir, "main-og.jpg"),
+  };
+  const projects = generateMainOnly ? [mainOgDefinition] : projectDefinitions;
   const chromePath = await getChromePath();
 
   if (projects.length === 0) {
@@ -233,7 +243,7 @@ async function main() {
   const sharpCount = generated.filter((image) => image.renderer === "sharp").length;
   const chromeCount = generated.filter((image) => image.renderer === "chrome").length;
 
-  console.log(`Project OG images generated: ${generated.length}`);
+  console.log(`${generateMainOnly ? "Main OG image" : "Project OG images"} generated: ${generated.length}`);
   console.log(`Dimensions: ${ogWidth}x${ogHeight}`);
   console.log(`Output directory: ${path.relative(projectRoot, ogDir)}`);
   console.log(`Rendered with sharp: ${sharpCount}`);

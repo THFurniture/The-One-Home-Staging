@@ -18,7 +18,7 @@ type BuildMetaArgs = {
   imageAlt: string;
 };
 
-const ogImageVersion = "20260616";
+const ogImageVersion = "20260708";
 
 export function getRequestOrigin(request: Request) {
   const requestUrl = new URL(request.url);

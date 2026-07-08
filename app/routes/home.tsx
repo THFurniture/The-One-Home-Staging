@@ -10,7 +10,7 @@ export function meta({ matches, location }: Route.MetaArgs) {
       "Thu Luxury Homes provides premium home staging and interior design services across Greater Vancouver, BC.",
     origin: getMetaOrigin(matches),
     pathname: location.pathname,
-    imagePath: "/og/w26-residence-og.jpg",
+    imagePath: "/og/main-og.jpg",
     imageAlt: "Luxury staged home interior by Thu Luxury Homes",
   });
 }
